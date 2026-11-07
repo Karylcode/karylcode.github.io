@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCover from '../../components/PostCover.astro';
+import { getPosts, postUrl, formatDate, isoDate } from '../../lib/posts';
+
+const posts = await getPosts();
+---
+
+<Base title="開發日誌" current="devlog" description="一款 3D 動作 RPG Demo 的開發紀錄，一週一篇。">
+  <main class="page">
+    <header class="list-head">
+      <span class="eyebrow">Devlog</span>
+      <h1>開發日誌</h1>
+      <p>
+        一款 3D 動作 RPG Demo 的開發紀錄，用 Unity 6 和 URP 做。程式由 AI 代理（Claude Code、Codex）寫，我負責定需求、做決定、驗收。每篇寫的是當時的狀態，玩法和美術之後還會大改。
+      </p>
+    </header>
+
+    <ol class="post-list" reversed>
+      {
+        posts.map((post, i) => (
+          <li>
+            <a class="card" href={postUrl(post)}>
+              <PostCover post={post} eager={i === 0} />
+              <div class="card-body">
+                <div class="meta">
+                  <time class="date" datetime={isoDate(post.data.date)}>
+                    {formatDate(post.data.date)}
+                  </time>
+                  {post.data.period && <span>{post.data.period}</span>}
+                  {post.data.draft && <span>草稿</span>}
+                </div>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.summary}</p>
+                <span class="more">閱讀全文 →</span>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </main>
+</Base>

@@ -1,0 +1,45 @@
+---
+// 列表卡片的封面：有圖就放圖，沒圖就放日期排版
+import type { Post } from '../lib/posts';
+import { shortDate } from '../lib/posts';
+
+interface Props {
+  post: Post;
+  eager?: boolean;
+}
+
+const { post, eager = false } = Astro.props;
+const { cover, coverAlt, title, period, date } = post.data;
+// 「9/30 – 10/1」拆成兩段；只有一天就整串顯示
+const [from, to] = (period ?? '').split('–').map((s) => s.trim());
+---
+
+<div class="card-media">
+  {
+    cover ? (
+      <img
+        src={cover}
+        alt={coverAlt ?? title}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        width="1600"
+        height="900"
+      />
+    ) : (
+      <div class="card-type" aria-hidden="true">
+        <span class="big">
+          {from && to ? (
+            <>
+              {from}
+              <em> – </em>
+              {to}
+            </>
+          ) : (
+            from || shortDate(date)
+          )}
+        </span>
+        <span class="small">Devlog · {date.getUTCFullYear()}</span>
+      </div>
+    )
+  }
+</div>

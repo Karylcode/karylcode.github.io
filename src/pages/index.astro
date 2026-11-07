@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPosts, postUrl, shortDate } from '../lib/posts';
+
+const [latest] = await getPosts();
+---
+
+<Base bare>
+  <div class="home">
+    <main class="home-main">
+      <div class="home-rule" aria-hidden="true"></div>
+      <h1 class="home-title">Karyl Devlog</h1>
+      <p class="home-sub">開發日誌</p>
+      <p class="home-lede">
+        做遊戲的過程，照實記下來：做了什麼、怎麼決定、踩了哪些坑。
+      </p>
+      <div class="home-actions">
+        <a class="button" href="/devlog/">進入開發日誌 <span class="arrow" aria-hidden="true">→</span></a>
+        {
+          latest && (
+            <a class="home-latest" href={postUrl(latest)}>
+              最新 <span class="mono">{shortDate(latest.data.date)}</span>　<span>{latest.data.title}</span>
+            </a>
+          )
+        }
+      </div>
+    </main>
+  </div>
+</Base>

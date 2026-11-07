@@ -1,0 +1,21 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# 給領導、使用者看的截圖和全文，不進 git、不部署
+_review/
+
+# 隱私自查的私人字詞清單（裝置名稱等），只留在本機
+.privacy-words.local.txt
+
+# logs / env
+npm-debug.log*
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db

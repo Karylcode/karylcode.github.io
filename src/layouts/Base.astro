@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  /** 首頁不放頂端導覽列 */
+  bare?: boolean;
+  current?: 'devlog';
+  type?: 'website' | 'article';
+}
+
+const SITE_NAME = 'Karyl Devlog';
+const {
+  title,
+  description = 'Karyl Devlog｜開發日誌：一款 3D 動作 RPG Demo 的開發紀錄。',
+  image,
+  bare = false,
+  current,
+  type = 'website',
+} = Astro.props;
+
+const fullTitle = title ? `${title}｜${SITE_NAME}` : `${SITE_NAME}｜開發日誌`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0d0e10" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title ?? SITE_NAME} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="zh_TW" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+  </head>
+  <body>
+    {
+      !bare && (
+        <header class="site-header">
+          <a class="brand" href="/">
+            Karyl Devlog <small>開發日誌</small>
+          </a>
+          <nav class="site-nav" aria-label="主選單">
+            <a href="/devlog/" aria-current={current === 'devlog' ? 'page' : undefined}>
+              所有文章
+            </a>
+          </nav>
+        </header>
+      )
+    }
+    <slot />
+    {
+      !bare && (
+        <footer class="site-footer">
+          <span>Karyl Devlog · 開發日誌</span>
+          <a href="/devlog/">所有文章</a>
+        </footer>
+      )
+    }
+  </body>
+</html>
